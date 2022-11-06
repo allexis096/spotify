@@ -31,6 +31,7 @@
 		AD52D4CB2917306200A6D2FF /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD52D4CA2917306200A6D2FF /* UserProfile.swift */; };
 		AD661827291801290099DCD5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD661826291801290099DCD5 /* Extensions.swift */; };
 		AD661829291812410099DCD5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD661828291812410099DCD5 /* Utils.swift */; };
+		AD66182B291849670099DCD5 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD66182A291849670099DCD5 /* AuthResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		AD52D4CA2917306200A6D2FF /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		AD661826291801290099DCD5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AD661828291812410099DCD5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		AD66182A291849670099DCD5 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +183,7 @@
 				AD52D4C62917305000A6D2FF /* AudioTrack.swift */,
 				AD52D4C82917305A00A6D2FF /* Artist.swift */,
 				AD52D4CA2917306200A6D2FF /* UserProfile.swift */,
+				AD66182A291849670099DCD5 /* AuthResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				AD52D48F291729B600A6D2FF /* SceneDelegate.swift in Sources */,
 				AD52D4B829172E6A00A6D2FF /* PlayerViewController.swift in Sources */,
 				AD52D4C029172FEB00A6D2FF /* APICaller.swift in Sources */,
+				AD66182B291849670099DCD5 /* AuthResponse.swift in Sources */,
 				AD52D4B429172E5300A6D2FF /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

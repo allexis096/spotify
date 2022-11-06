@@ -50,10 +50,17 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         guard let url = webView.url else { return }
+        guard let code = URLComponents(string: url.absoluteString)?.queryItems?.first(where: { $0.name == "code"})?.value else {
+            return
+        }
         
-        let component = URLComponents(string: url.absoluteString)
-        let queryItems = component
-        guard let code = component?.queryItems?.first(where: { $0.name == "code"})?.value else { return }
+        webView.isHidden = true
         
+        AuthManager.shared.exchangeCodeForToken(code: code) { [weak self] success in
+            DispatchQueue.main.async {
+                self?.navigationController?.popToRootViewController(animated: true)
+                self?.completionHandler?(success)
+            }
+        }
     }
 }
