@@ -74,8 +74,6 @@ class ProfileViewController: UIViewController,
             return
         }
         
-        print("url: \(url)")
-        
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: view.width / 1.5))
         
         let imageSize: CGFloat = headerView.height / 2
