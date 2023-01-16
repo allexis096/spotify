@@ -239,6 +239,41 @@ final class APICaller {
     }
     
     //-----------------------------------------------------------------------
+    //  MARK: - Search
+    //-----------------------------------------------------------------------
+    
+    public func search(with query: String, completion: @escaping (Result<[SearchResult], Error>) -> Void) {
+        createRequest(
+            with: URL(string: Constants.baseApiUrl + "/search?limit=10&type=album,artist,playlist,track&q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"),
+            type: .GET
+        ) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(SearchResultResponse.self, from: data)
+                    var seachResults: [SearchResult] = []
+                    
+                    seachResults.append(contentsOf: result.tracks.items.compactMap({ SearchResult.track(model: $0) }))
+                    seachResults.append(contentsOf: result.playlists.items.compactMap({ SearchResult.playlist(model: $0) }))
+                    seachResults.append(contentsOf: result.albums.items.compactMap({ SearchResult.album(model: $0) }))
+                    seachResults.append(contentsOf: result.artists.items.compactMap({ SearchResult.artist(model: $0) }))
+                    
+                    completion(.success(seachResults))
+                } catch {
+                    print(error)
+                    completion(.failure(error))
+                }
+            }
+            
+            task.resume()
+        }
+    }
+    
+    //-----------------------------------------------------------------------
     //  MARK: - Custom Methods
     //-----------------------------------------------------------------------
     

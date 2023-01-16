@@ -7,9 +7,13 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UISearchResultsUpdating {
+class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     private var categories = [Category]()
+    
+    //-----------------------------------------------------------------------
+    //  MARK: - Autolayout
+    //-----------------------------------------------------------------------
     
     private let searchController: UISearchController = {
         let vc = UISearchController(searchResultsController: SearchResultsViewController())
@@ -55,6 +59,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
+        searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
         
@@ -84,21 +89,65 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
     }
     
     //-----------------------------------------------------------------------
+    //  MARK: - SearchBar Delegate
+    //-----------------------------------------------------------------------
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController,
+              let query = searchBar.text,
+              !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return
+        }
+        
+        resultsController.delegate = self
+        
+        APICaller.shared.search(with: query) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let results):
+                    resultsController.update(with: results)
+                case .failure(let error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
+    //-----------------------------------------------------------------------
     //  MARK: - UISearchResultsUpdating
     //-----------------------------------------------------------------------
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController,
-              let query = searchController.searchBar.text,
-              !query.trimmingCharacters(in: .whitespaces).isEmpty else {
-            return
-        }
-//        resultsController.update(with: results)
-        
-        print("query: \(query)")
-//        APICaller.shared.search
     }
 }
+
+//-----------------------------------------------------------------------
+//  MARK: - SearchResultsViewControllerDelegate
+//-----------------------------------------------------------------------
+
+extension SearchViewController: SearchResultsViewControllerDelegate {
+    func didTapResult(_ result: SearchResult) {
+        switch result {
+        case .artist(model: let model):
+            break
+        case .album(model: let model):
+            let vc = AlbumViewController(album: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .track(model: let model):
+            break
+        case .playlist(model: let model):
+            let vc = PlaylistViewController(playlist: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+}
+
+//-----------------------------------------------------------------------
+//  MARK: - CollectionView Delegate, Datasource
+//-----------------------------------------------------------------------
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
